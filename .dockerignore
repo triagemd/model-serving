@@ -1,0 +1,13 @@
+.cache/**/*
+.cache
+.venv/**/*
+.venv
+build/**/*
+build
+dist/**/*
+dist
+*.egg-info/**/*
+*.egg-info
+example/.venv/**/*
+example/.venv
+.env

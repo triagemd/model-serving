@@ -1,0 +1,7 @@
+.venv
+.cache
+*.egg-info
+/dist/
+/build/
+.env
+secrets.yml
