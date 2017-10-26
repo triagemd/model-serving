@@ -10,7 +10,7 @@ services:
   - docker
 
 before_install:
-  - script/up
+  - travis_wait script/up
 
 script:
   - script/test
