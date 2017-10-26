@@ -1,0 +1,17 @@
+version: '3'
+services:
+  http:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      SERVING_MODEL: https://s3.amazonaws.com/tf-models-839c7ddd-9cab-49fa-9b42-bde1a842086e/mobilenet_v1.tar.gz
+      SERVING_MODEL_SPEC: mobilenet_v1
+  grpcio:
+    image: triage/tensorflow-model-serving
+    ports:
+      - "9000:9000"
+    environment:
+      SERVING_MODEL: https://s3.amazonaws.com/tf-models-839c7ddd-9cab-49fa-9b42-bde1a842086e/mobilenet_v1.tar.gz
