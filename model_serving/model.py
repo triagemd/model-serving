@@ -37,7 +37,7 @@ class Model(object):
     def _decode_spec(self, encoded_spec):
         if isinstance(encoded_spec, dict):
             return encoded_spec
-        if '://' in encoded_spec:
+        if encoded_spec.startswith('https://') or encoded_spec.startswith('gs://'):
             with tempfile.NamedTemporaryFile() as temp_file:
                 stored.sync(encoded_spec, temp_file.name)
                 with open(temp_file.name, 'r') as file:
