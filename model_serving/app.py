@@ -1,6 +1,4 @@
 import os
-import json
-import base64
 import tempfile
 import stored
 
@@ -44,12 +42,6 @@ def create_app(model):
 
 if __name__ == '__main__':
     encoded_spec = os.environ.get('SERVING_MODEL_SPEC')
-    try:
-        spec = json.loads(base64.b64decode(encoded_spec))
-    except TypeError:
-        spec = {'name': encoded_spec}
-    except json.decoder.JSONDecodeError:
-        spec = {'name': encoded_spec}
-    model = Model(spec)
+    model = Model(encoded_spec)
     app = create_app(model)
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', '5000')))
