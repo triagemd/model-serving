@@ -1,3 +1,8 @@
+import simplejson as json
+import base64
+import tempfile
+import stored
+
 from tensorflow_serving_client import TensorflowServingClient
 from keras_model_specs import ModelSpec
 
@@ -5,6 +10,7 @@ from keras_model_specs import ModelSpec
 class Model(object):
 
     def __init__(self, spec):
+        spec = self._decode_spec(spec)
         if spec and not isinstance(spec, dict):
             spec = {'name': spec}
         self.spec = ModelSpec.get(spec['name'], **spec)
@@ -27,3 +33,16 @@ class Model(object):
         return {
             'spec': spec
         }
+
+    def _decode_spec(self, encoded_spec):
+        if isinstance(encoded_spec, dict):
+            return encoded_spec
+        if '://' in encoded_spec:
+            with tempfile.NamedTemporaryFile() as temp_file:
+                stored.sync(encoded_spec, temp_file.name)
+                with open(temp_file.name, 'r') as file:
+                    return json.loads(file.read())
+        try:
+            return json.loads(base64.b64decode(encoded_spec))
+        except (TypeError, base64.binascii.Error, json.JSONDecodeError):
+            return {'name': encoded_spec}
