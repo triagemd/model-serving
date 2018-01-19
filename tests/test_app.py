@@ -24,7 +24,7 @@ def assert_cat_predictions(predictions, dictionary):
     np.testing.assert_array_almost_equal_nulp(np.array(scores), np.array(expected_scores))
 
 
-@pytest.fixture
+@pytest.fixture(scope='session')
 def app(imagenet_mobilenet_v1_model):
     app = create_app(imagenet_mobilenet_v1_model)
     app.config['TESTING'] = True
