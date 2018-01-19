@@ -6,7 +6,7 @@ import numpy as np
 from model_serving.model import Model
 
 
-@pytest.fixture
+@pytest.fixture(scope='session')
 def mobilenet_json():
     return {
         'spec': {
