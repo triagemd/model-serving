@@ -62,4 +62,4 @@ def test_classify_image(imagenet_mobilenet_v1_model, imagenet_dictionary):
     expected_classes = [name for name, _ in expected_top_5]
     assert classes == expected_classes
     expected_scores = [score for _, score in expected_top_5]
-    np.testing.assert_array_almost_equal_nulp(np.array(scores), np.array(expected_scores))
+    np.testing.assert_array_almost_equal(np.array(scores), np.array(expected_scores))
