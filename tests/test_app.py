@@ -21,7 +21,7 @@ def assert_cat_predictions(predictions, dictionary):
     expected_classes = [name for name, _ in expected_top_5]
     assert classes == expected_classes
     expected_scores = [score for _, score in expected_top_5]
-    np.testing.assert_array_almost_equal_nulp(np.array(scores), np.array(expected_scores))
+    np.testing.assert_array_almost_equal(np.array(scores), np.array(expected_scores))
 
 
 @pytest.fixture(scope='session')
