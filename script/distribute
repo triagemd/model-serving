@@ -1,24 +1,10 @@
 #!/usr/bin/env bash
 set -e
 VERSION=$(grep "version=" setup.py | tr -d "version='" | tr -d ",'" | tr -d "[:space:]")
+source script/docker_build_and_push.sh
 set -x
 
-docker build -t triage/model-serving:$VERSION -f docker/Dockerfile .
-docker build -t triage/model-serving:latest -f docker/Dockerfile .
-docker push triage/model-serving:$VERSION
-docker push triage/model-serving:latest
-
-docker build -t triage/model-serving-optimized:$VERSION -f docker/optimized.Dockerfile .
-docker build -t triage/model-serving-optimized:latest -f docker/optimized.Dockerfile .
-docker push triage/model-serving-optimized:$VERSION
-docker push triage/model-serving-optimized:latest
-
-docker build -t triage/model-serving-gpu:$VERSION -f docker/gpu.Dockerfile .
-docker build -t triage/model-serving-gpu:latest -f docker/gpu.Dockerfile .
-docker push triage/model-serving-gpu:$VERSION
-docker push triage/model-serving-gpu:latest
-
-docker build -t triage/model-serving-optimized-gpu:$VERSION -f docker/optimized-gpu.Dockerfile .
-docker build -t triage/model-serving-optimized-gpu:latest -f docker/optimized-gpu.Dockerfile .
-docker push triage/model-serving-optimized-gpu:$VERSION
-docker push triage/model-serving-optimized-gpu:latest
+docker_build_and_push triage/model-serving:$VERSION docker/Dockerfile "--build-arg BASE_IMAGE=python2.7-tensorflow-serving"
+docker_build_and_push triage/model-serving-optimized:$VERSION docker/Dockerfile "--build-arg BASE_IMAGE=python2.7-tensorflow-serving-optimized"
+docker_build_and_push triage/model-serving-gpu:$VERSION docker/Dockerfile "--build-arg BASE_IMAGE=python2.7-tensorflow-serving-gpu"
+docker_build_and_push triage/model-serving-optimized-gpu:$VERSION docker/Dockerfile "--build-arg BASE_IMAGE=python2.7-tensorflow-serving-optimized-gpu"

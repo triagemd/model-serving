@@ -1,17 +1,14 @@
-FROM triage/python2.7-tensorflow-serving:latest
+ARG BASE_IMAGE
+FROM triage/${BASE_IMAGE}:latest
 
 RUN apt-get -y update && \
     apt-get -y install ruby && \
     apt-get clean && \
-    gem install foreman && \
-    pip install --no-cache-dir flask \
-                               tensorflow-serving-client \
-                               stored \
-                               keras-model-specs
+    gem install foreman
 
 WORKDIR /app
 ADD . /app
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir .
 
 ADD docker/entrypoint.sh /opt/
 ADD docker/Procfile /opt/
