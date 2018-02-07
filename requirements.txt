@@ -6,3 +6,5 @@ pytest-flask
 flake8
 autoflake
 pep8
+
+tensorflow
