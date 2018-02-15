@@ -2,6 +2,7 @@ A [tensorflow-serving](https://www.tensorflow.org/serving/) model server via HTT
 
 
 [![Build Status](https://travis-ci.org/triagemd/model-serving.svg?branch=master)](https://travis-ci.org/triagemd/model-serving)
+[![codecov](https://codecov.io/gh/triagemd/model-serving/branch/master/graph/badge.svg)](https://codecov.io/gh/triagemd/model-serving)
 
 
 | Docker image | |
