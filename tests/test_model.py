@@ -33,7 +33,7 @@ def test_initialize_with_base64_dict_spec(mobilenet_json):
 
 
 def test_initialize_with_url_spec(mobilenet_json):
-    model = Model('https://s3.amazonaws.com/tf-models-839c7ddd-9cab-49fa-9b42-bde1a842086e/model_spec.json')
+    model = Model('https://storage.googleapis.com/tf-models-839c7ddd-9cab-49fa-9b42-bde1a842086e/model_spec.json')
     assert model.as_json() == mobilenet_json
 
 

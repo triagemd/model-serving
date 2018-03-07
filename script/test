@@ -13,7 +13,7 @@ do
 done
 
 # Run tests and lint checks.
-PYTHONPATH="." pytest --cov=./ $ARGS
+PYTHONPATH="." pytest --cov=./ -v -s $ARGS
 flake8 --max-line-length 50000 --ignore W503,F812 model_serving tests
 
 # Upload coverage for CI.

@@ -15,8 +15,11 @@ before_install:
 script:
   - script/test
 
-after_success:
-  - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" && "$TRAVIS_BRANCH" == "master" && "$TRAVIS_PULL_REQUEST" == "false" ]]; then
-      docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
-      script/distribute;
-    fi
+jobs:
+  include:
+    - stage: distribute
+      if: branch = master AND type != pull_request
+      install: skip
+      script:
+        - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
+        - script/distribute;
