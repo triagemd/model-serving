@@ -55,6 +55,19 @@ def test_model_classify_no_image_file(client):
     assert response.json == {'error': 'missing image file'}
 
 
+def test_model_classify_invalid_image_url(client):
+    response = client.get('/classify', query_string={'image': 'https://example.com/not-an-image.jpg'})
+    assert response.status_code == 200
+    assert response.json == {'error': 'unable to resolve image url'}
+
+
+def test_model_classify_invalid_image_file(client):
+    with open('tests/files/not-an-image.jpg', 'rb') as file:
+        response = client.post('/classify', data={'image': (file, 'not-an-image.jpg')})
+    assert response.status_code == 200
+    assert response.json == {'error': 'unable to read image file'}
+
+
 def test_model_classify_with_image_url(client, imagenet_dictionary):
     response = client.get('/classify', query_string={'image': 'https://image.ibb.co/nu62ba/cat.jpg'})
     assert response.status_code == 200

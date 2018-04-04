@@ -12,6 +12,15 @@ def create_app(model):
     app.config.from_object(__name__)
     app.model = model
 
+    @app.errorhandler(Exception)
+    def unhandled_exception(exception):
+        if str(exception) == '<Response [404]>':
+            return jsonify({'error': 'unable to resolve image url'})
+        elif 'cannot identify image file' in str(exception):
+            return jsonify({'error': 'unable to read image file'})
+        else:
+            return jsonify({'error': str(exception)})
+
     @app.route('/')
     def index():
         return jsonify(app.model.as_json())
