@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='model-serving',
-    version='0.0.3',
+    version='0.0.4',
     description='A tensorflow-serving model server via HTTP.',
     author='Triage Technologies Inc.',
     author_email='ai@triage.com',
