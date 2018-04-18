@@ -14,7 +14,7 @@ def create_app(model):
 
     @app.errorhandler(Exception)
     def unhandled_exception(exception):
-        if str(exception) == '<Response [404]>':
+        if str(exception) == '<Response [404]>' or 'Max retries exceeded with url' in str(exception):
             return jsonify({'error': 'unable to resolve image url'})
         elif 'cannot identify image file' in str(exception):
             return jsonify({'error': 'unable to read image file'})

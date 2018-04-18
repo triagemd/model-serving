@@ -56,7 +56,13 @@ def test_model_classify_no_image_file(client):
 
 
 def test_model_classify_invalid_image_url(client):
-    response = client.get('/classify', query_string={'image': 'https://example.com/not-an-image.jpg'})
+    response = client.get('/classify', query_string={'image': 'https://not-a-url/image.jpg'})
+    assert response.status_code == 200
+    assert response.json == {'error': 'unable to resolve image url'}
+
+
+def test_model_classify_non_existent_image_url(client):
+    response = client.get('/classify', query_string={'image': 'https://example.com/non-existent-image.jpg'})
     assert response.status_code == 200
     assert response.json == {'error': 'unable to resolve image url'}
 
