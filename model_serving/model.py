@@ -5,22 +5,28 @@ import stored
 
 from tensorflow_serving_client import TensorflowServingClient
 from keras_model_specs import ModelSpec
+from model_serving.utils import l2_normalize
 
 
 class Model(object):
 
-    def __init__(self, spec):
+    def __init__(self, spec, port=9000):
         spec = self._decode_spec(spec)
         if spec and not isinstance(spec, dict):
             spec = {'name': spec}
         self.spec = ModelSpec.get(spec['name'], **spec)
         self.serving_timeout = 30
-        self.serving_client = TensorflowServingClient('localhost', 9000)
+        self.serving_client = TensorflowServingClient('localhost', port)
 
     def classify_image(self, image_path):
         image_data = self.spec.load_image(image_path)
         response = self.serving_client.make_prediction(image_data, 'image', timeout=self.serving_timeout)
         return response['class_probabilities'][0].tolist()
+
+    def extract_features(self, image_path):
+        image_data = self.spec.load_image(image_path)
+        response = self.serving_client.make_prediction(image_data, 'image', timeout=self.serving_timeout)
+        return l2_normalize(response['image_features'][0])[0].tolist()
 
     def as_json(self):
         spec = {

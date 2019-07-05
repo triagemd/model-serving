@@ -63,3 +63,14 @@ def test_classify_image(imagenet_mobilenet_v1_model, imagenet_dictionary):
     assert classes == expected_classes
     expected_scores = [score for _, score in expected_top_5]
     np.testing.assert_array_almost_equal(np.array(scores), np.array(expected_scores))
+
+
+def test_extract_image_features(imagenet_mobilenet_v1_features_model):
+    with open('tests/files/cat.jpg', 'rb') as image_file:
+        features = imagenet_mobilenet_v1_features_model.extract_features(image_file.name)
+
+    # Check mobilenet feature dimensions
+    assert len(features) == 1024
+
+    # Check features are l2 normalized
+    np.testing.assert_array_almost_equal(np.linalg.norm(np.array(features)), 1.0)
