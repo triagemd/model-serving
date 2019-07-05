@@ -38,8 +38,10 @@ def create_app(model):
                 if 'image' not in request.args:
                     return jsonify({'error': 'missing image url'})
                 stored.sync(request.args['image'], image_path)
-
-            predictions = app.model.classify_image(image_path)
+            if 'extract_features' in request.args:
+                predictions = app.model.extract_features(image_path)
+            else:
+                predictions = app.model.classify_image(image_path)
             return jsonify(predictions)
 
     @app.route('/services/ping')
