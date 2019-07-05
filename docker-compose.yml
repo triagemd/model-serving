@@ -8,3 +8,11 @@ services:
       - "9000:9000"
     environment:
       SERVING_MODEL: https://storage.googleapis.com/tf-models-839c7ddd-9cab-49fa-9b42-bde1a842086e/mobilenet_v1.tar.gz
+  tf-serving_2:
+    build:
+      context: docker/test-tf-serving
+      dockerfile: Dockerfile
+    ports:
+      - "9001:9000"
+    environment:
+      SERVING_MODEL: https://storage.googleapis.com/tf-models-839c7ddd-9cab-49fa-9b42-bde1a842086e/mobilenet_v1_features.zip
