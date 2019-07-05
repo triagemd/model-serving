@@ -22,6 +22,7 @@ setup(
         'futures',
         'keras-model-specs',
         'stored>=0.0.29',
-        'sklearn'
+        'sklearn',
+        'numpy'
     ]
 )
