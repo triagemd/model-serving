@@ -24,15 +24,22 @@ def assert_cat_predictions(predictions, dictionary):
     np.testing.assert_array_almost_equal(np.array(scores), np.array(expected_scores))
 
 
-@pytest.fixture(scope='session')
-def app(imagenet_mobilenet_v1_model):
+@pytest.fixture(scope='function')
+def client_app(imagenet_mobilenet_v1_model):
     app = create_app(imagenet_mobilenet_v1_model)
     app.config['TESTING'] = True
-    return app
+    return app.test_client()
 
 
-def test_model(client):
-    response = client.get('/')
+@pytest.fixture(scope='function')
+def client_app_features(imagenet_mobilenet_v1_features_model):
+    app = create_app(imagenet_mobilenet_v1_features_model)
+    app.config['TESTING'] = True
+    return app.test_client()
+
+
+def test_model(client_app):
+    response = client_app.get('/')
     assert response.status_code == 200
     assert response.json == {
         'spec': {
@@ -43,51 +50,59 @@ def test_model(client):
     }
 
 
-def test_model_classify_no_image_url(client):
-    response = client.get('/classify')
+def test_model_classify_no_image_url(client_app):
+    response = client_app.get('/classify')
     assert response.status_code == 200
     assert response.json == {'error': 'missing image url'}
 
 
-def test_model_classify_no_image_file(client):
-    response = client.post('/classify')
+def test_model_classify_no_image_file(client_app):
+    response = client_app.post('/classify')
     assert response.status_code == 200
     assert response.json == {'error': 'missing image file'}
 
 
-def test_model_classify_invalid_image_url(client):
-    response = client.get('/classify', query_string={'image': 'https://not-a-url/image.jpg'})
+def test_model_classify_invalid_image_url(client_app):
+    response = client_app.get('/classify', query_string={'image': 'https://not-a-url/image.jpg'})
     assert response.status_code == 200
     assert response.json == {'error': 'unable to resolve image url'}
 
 
-def test_model_classify_non_existent_image_url(client):
-    response = client.get('/classify', query_string={'image': 'https://example.com/non-existent-image.jpg'})
+def test_model_classify_non_existent_image_url(client_app):
+    response = client_app.get('/classify', query_string={'image': 'https://example.com/non-existent-image.jpg'})
     assert response.status_code == 200
     assert response.json == {'error': 'unable to resolve image url'}
 
 
-def test_model_classify_invalid_image_file(client):
+def test_model_classify_invalid_image_file(client_app):
     with open('tests/files/not-an-image.jpg', 'rb') as file:
-        response = client.post('/classify', data={'image': (file, 'not-an-image.jpg')})
+        response = client_app.post('/classify', data={'image': (file, 'not-an-image.jpg')})
     assert response.status_code == 200
     assert response.json == {'error': 'unable to read image file'}
 
 
-def test_model_classify_with_image_url(client, imagenet_dictionary):
-    response = client.get('/classify', query_string={'image': 'https://image.ibb.co/nu62ba/cat.jpg'})
+def test_model_classify_with_image_url(client_app, imagenet_dictionary):
+    response = client_app.get('/classify', query_string={'image': 'https://image.ibb.co/nu62ba/cat.jpg'})
     assert response.status_code == 200
     assert_cat_predictions(response.json, imagenet_dictionary)
 
 
-def test_model_classify_with_image_file(client, imagenet_dictionary):
+def test_model_classify_with_image_file(client_app, imagenet_dictionary):
     with open('tests/files/cat.jpg', 'rb') as file:
-        response = client.post('/classify', data={'image': (file, 'cat.jpg')})
+        response = client_app.post('/classify', data={'image': (file, 'cat.jpg')})
     assert response.status_code == 200
     assert_cat_predictions(response.json, imagenet_dictionary)
 
 
-def test_services_ping(client):
-    response = client.get('/services/ping')
+def test_model_extract_features_with_image_file(client_app_features):
+    with open('tests/files/cat.jpg', 'rb') as file:
+        response = client_app_features.post('/classify', data={'image': (file, 'cat.jpg')},
+                                            query_string={'extract_features': True})
+    assert response.status_code == 200
+    assert len(response.json) == 1024
+
+
+def test_services_ping(client_app):
+    response = client_app.get('/services/ping')
     assert response.status_code == 200
     assert response.json == {'ping': 'pong'}
