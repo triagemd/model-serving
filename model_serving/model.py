@@ -36,8 +36,6 @@ class Model(object):
         }
         if self.spec.preprocess_args:
             spec['preprocess_args'] = self.spec.preprocess_args
-        if self.spec.bgr_order:
-            spec['bgr_order'] = self.spec.bgr_order
         return {
             'spec': spec
         }
