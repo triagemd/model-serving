@@ -17,4 +17,4 @@ ADD docker/Procfile /opt/
 EXPOSE "5000"
 ENV PORT 5000
 
-CMD ["/opt/entrypoint.sh"]
+ENTRYPOINT ["/opt/entrypoint.sh"]

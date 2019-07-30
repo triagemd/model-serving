@@ -8,4 +8,4 @@ RUN apt-get -y update && \
 
 ADD entrypoint.sh /opt/
 
-CMD ["/opt/entrypoint.sh"]
+ENTRYPOINT ["/opt/entrypoint.sh"]
