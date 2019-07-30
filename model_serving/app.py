@@ -1,6 +1,5 @@
 import os
 import tempfile
-import stored
 import traceback
 
 from flask import Flask, jsonify, request
@@ -27,7 +26,7 @@ def create_app(model):
     def index():
         return jsonify(app.model.as_json())
 
-    @app.route('/classify', methods=['GET', 'POST'])
+    @app.route('/classify', methods=['POST'])
     def classify():
         with tempfile.NamedTemporaryFile() as image_file:
             image_path = image_file.name
@@ -36,10 +35,6 @@ def create_app(model):
                     return jsonify({'error': 'missing image file'})
                 image_file.write(request.files['image'].read())
                 image_file.flush()
-            else:
-                if 'image' not in request.args:
-                    return jsonify({'error': 'missing image url'})
-                stored.sync(request.args['image'], image_path)
             if 'extract_features' in request.args:
                 predictions = app.model.extract_features(image_path)
             else:
