@@ -1,7 +1,10 @@
-FROM triage/python2.7-tensorflow-serving:latest
+FROM tensorflow/serving:latest
 
-RUN pip install --upgrade pip && \
-    pip install stored
+RUN apt-get -y update && \
+    apt-get -y install python python-pip && \
+    apt-get clean && \
+    python -m pip install --upgrade pip && \
+    python -m pip install stored
 
 ADD entrypoint.sh /opt/
 
