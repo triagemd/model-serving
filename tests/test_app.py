@@ -50,28 +50,10 @@ def test_model(client_app):
     }
 
 
-def test_model_classify_no_image_url(client_app):
-    response = client_app.get('/classify')
-    assert response.status_code == 200
-    assert response.json == {'error': 'missing image url'}
-
-
 def test_model_classify_no_image_file(client_app):
     response = client_app.post('/classify')
     assert response.status_code == 200
     assert response.json == {'error': 'missing image file'}
-
-
-def test_model_classify_invalid_image_url(client_app):
-    response = client_app.get('/classify', query_string={'image': 'https://not-a-url/image.jpg'})
-    assert response.status_code == 200
-    assert response.json == {'error': 'unable to resolve image url'}
-
-
-def test_model_classify_non_existent_image_url(client_app):
-    response = client_app.get('/classify', query_string={'image': 'https://example.com/non-existent-image.jpg'})
-    assert response.status_code == 200
-    assert response.json == {'error': 'unable to resolve image url'}
 
 
 def test_model_classify_invalid_image_file(client_app):
@@ -79,12 +61,6 @@ def test_model_classify_invalid_image_file(client_app):
         response = client_app.post('/classify', data={'image': (file, 'not-an-image.jpg')})
     assert response.status_code == 200
     assert response.json == {'error': 'unable to read image file'}
-
-
-def test_model_classify_with_image_url(client_app, imagenet_dictionary):
-    response = client_app.get('/classify', query_string={'image': 'https://image.ibb.co/nu62ba/cat.jpg'})
-    assert response.status_code == 200
-    assert_cat_predictions(response.json, imagenet_dictionary)
 
 
 def test_model_classify_with_image_file(client_app, imagenet_dictionary):
