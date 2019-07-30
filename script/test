@@ -7,7 +7,7 @@ set -e
 n=0
 until [ $n -ge 10 ]
 do
-  if [[ $(nc localhost 9000 -w 1 | wc -c) -ne 0 ]]; then break; fi
+  if [[ $(nc localhost 9000 -w 1 | wc -c) -ne 0 && $(nc localhost 9001 -w 1 | wc -c) -ne 0 ]]; then break; fi
   n=$[$n+1]
   sleep 1
 done
