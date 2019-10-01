@@ -18,7 +18,7 @@ setup(
         'pyyaml',
         'simplejson',
         'tensorflow_serving_client>=0.0.10',
-        'tensorflow',
+        'tensorflow==1.*',
         'requests',
         'futures',
         'keras-model-specs>=1.2.0',
