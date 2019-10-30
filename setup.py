@@ -21,7 +21,7 @@ setup(
         'tensorflow==1.*',
         'requests',
         'futures',
-        'keras-model-specs>=1.2.0',
+        'keras-model-specs~=1.2',
         'stored>=0.0.29',
         'sklearn',
         'numpy'
