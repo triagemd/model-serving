@@ -1,4 +1,4 @@
-FROM tensorflow/serving:1.14.0
+FROM tensorflow/serving:1.15.0
 
 RUN apt-get -y update && \
     apt-get -y install python python-pip && \
