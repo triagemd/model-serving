@@ -4,5 +4,5 @@ VERSION=$(grep "version=" setup.py | tr -d "version='" | tr -d ",'" | tr -d "[:s
 source script/docker_build_and_push.sh
 set -x
 
-docker_build_and_push triage/model-serving:$VERSION docker/Dockerfile "--build-arg BASE_TAG=1.14.0"
-docker_build_and_push triage/model-serving-gpu:$VERSION docker/Dockerfile "--build-arg BASE_TAG=1.14.0-gpu"
+docker_build_and_push triage/model-serving:$VERSION docker/Dockerfile "--build-arg BASE_TAG=1.15.0"
+docker_build_and_push triage/model-serving-gpu:$VERSION docker/Dockerfile "--build-arg BASE_TAG=1.15.0-gpu"

@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 set -e
 . script/env
-set -x
+
 pip install --upgrade pip
-pip install grpcio grpcio-tools
-rm -Rf *.egg-info/
-pip install -r requirements.txt
+pip install --upgrade -r requirements.txt
+
 docker-compose up -d

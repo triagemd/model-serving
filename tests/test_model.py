@@ -28,7 +28,8 @@ def test_initialize_with_dict_spec(mobilenet_json):
 
 
 def test_initialize_with_base64_dict_spec(mobilenet_json):
-    model = Model(base64.b64encode(json.dumps({'name': 'mobilenet_v1'}).encode()).decode())
+    encoded_model = base64.b64encode(json.dumps({'name': 'mobilenet_v1'}).encode()).decode()
+    model = Model(encoded_model)
     assert model.as_json() == mobilenet_json
 
 
