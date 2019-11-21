@@ -52,5 +52,5 @@ class Model(object):
                     return json.loads(file.read())
         try:
             return json.loads(base64.b64decode(encoded_spec).decode())
-        except (TypeError, ValueError, base64.binascii.Error) as e:
+        except (TypeError, ValueError, base64.binascii.Error):
             return {'name': encoded_spec}
