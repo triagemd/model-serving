@@ -16,6 +16,7 @@ setup(
         'flask',
         'tensorflow_serving_client==1.*',
         'tensorflow==1.*',
-        'keras-model-specs==1.*'
+        'keras-model-specs==1.*',
+        'gsutil'
     ]
 )

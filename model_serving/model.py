@@ -1,6 +1,5 @@
 import json
 import base64
-import tempfile
 
 from tensorflow_serving_client import TensorflowServingClient
 from keras_model_specs import ModelSpec
@@ -36,11 +35,6 @@ class Model(object):
     def _decode_spec(self, encoded_spec):
         if isinstance(encoded_spec, dict):
             return encoded_spec
-        if encoded_spec.startswith('https://') or encoded_spec.startswith('gs://') or encoded_spec.startswith('/'):
-            with tempfile.NamedTemporaryFile() as temp_file:
-                stored.sync(encoded_spec, temp_file.name)
-                with open(temp_file.name, 'r') as file:
-                    return json.loads(file.read())
         try:
             return json.loads(base64.b64decode(encoded_spec).decode())
         except (TypeError, ValueError, base64.binascii.Error):
