@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='model-serving',
-    version='1.3.0',
+    version='1.4.0',
     description='A tensorflow-serving model server via HTTP.',
     author='Triage Technologies Inc.',
     author_email='ai@triage.com',
@@ -17,7 +17,6 @@ setup(
         'tensorflow_serving_client==1.*',
         'tensorflow==1.*',
         'keras-model-specs==1.*',
-        'stored>=0.0.29',
-        'sklearn'
+        'gsutil'
     ]
 )

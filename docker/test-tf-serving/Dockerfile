@@ -1,10 +1,8 @@
 FROM tensorflow/serving:1.15.0
 
 RUN apt-get -y update && \
-    apt-get -y install python python-pip && \
-    apt-get clean && \
-    python -m pip install --upgrade pip && \
-    python -m pip install stored
+    apt-get -y install wget libarchive-tools && \
+    apt-get clean
 
 ADD entrypoint.sh /opt/
 

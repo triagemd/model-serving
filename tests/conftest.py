@@ -11,11 +11,6 @@ def imagenet_mobilenet_v1_model():
 
 
 @pytest.fixture(scope='session')
-def imagenet_mobilenet_v1_features_model():
-    return Model({'name': 'mobilenet_v1'}, port=9001)
-
-
-@pytest.fixture(scope='session')
 def imagenet_dictionary():
     with open(os.path.join('tests', 'files', 'dictionary.csv'), 'r') as file:
         return [name for _, name in csv.reader(file)]

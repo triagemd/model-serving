@@ -31,13 +31,6 @@ def client_app(imagenet_mobilenet_v1_model):
     return app.test_client()
 
 
-@pytest.fixture(scope='function')
-def client_app_features(imagenet_mobilenet_v1_features_model):
-    app = create_app(imagenet_mobilenet_v1_features_model)
-    app.config['TESTING'] = True
-    return app.test_client()
-
-
 def test_model(client_app):
     response = client_app.get('/')
     assert response.status_code == 200
@@ -68,14 +61,6 @@ def test_model_classify_with_image_file(client_app, imagenet_dictionary):
         response = client_app.post('/classify', data={'image': (file, 'cat.jpg')})
     assert response.status_code == 200
     assert_cat_predictions(response.json, imagenet_dictionary)
-
-
-def test_model_extract_features_with_image_file(client_app_features):
-    with open('tests/files/cat.jpg', 'rb') as file:
-        response = client_app_features.post('/classify', data={'image': (file, 'cat.jpg')},
-                                            query_string={'extract_features': True})
-    assert response.status_code == 200
-    assert len(response.json) == 1024
 
 
 def test_services_ping(client_app):

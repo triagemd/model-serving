@@ -33,11 +33,6 @@ def test_initialize_with_base64_dict_spec(mobilenet_json):
     assert model.as_json() == mobilenet_json
 
 
-def test_initialize_with_url_spec(mobilenet_json):
-    model = Model('https://storage.googleapis.com/model-serving-fixtures/model_spec.json')
-    assert model.as_json() == mobilenet_json
-
-
 def test_as_json(imagenet_mobilenet_v1_model, mobilenet_json):
     actual = imagenet_mobilenet_v1_model.as_json()
     assert actual == mobilenet_json
@@ -64,14 +59,3 @@ def test_classify_image(imagenet_mobilenet_v1_model, imagenet_dictionary):
     assert classes == expected_classes
     expected_scores = [score for _, score in expected_top_5]
     np.testing.assert_array_almost_equal(np.array(scores), np.array(expected_scores))
-
-
-def test_extract_image_features(imagenet_mobilenet_v1_features_model):
-    with open('tests/files/cat.jpg', 'rb') as image_file:
-        features = imagenet_mobilenet_v1_features_model.extract_features(image_file.name)
-
-    # Check mobilenet feature dimensions
-    assert len(features) == 1024
-
-    # Check features are l2 normalized
-    np.testing.assert_array_almost_equal(np.linalg.norm(np.array(features)), 1.0)

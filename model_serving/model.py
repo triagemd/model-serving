@@ -1,11 +1,8 @@
 import json
 import base64
-import tempfile
-import stored
 
 from tensorflow_serving_client import TensorflowServingClient
 from keras_model_specs import ModelSpec
-from sklearn.preprocessing import normalize
 
 
 class Model(object):
@@ -23,13 +20,6 @@ class Model(object):
         response = self.serving_client.make_prediction(image_data, 'image', timeout=self.serving_timeout)
         return response['class_probabilities'][0].tolist()
 
-    def extract_features(self, image_path):
-        image_data = self.spec.load_image(image_path)
-        response = self.serving_client.make_prediction(image_data, 'image', timeout=self.serving_timeout)
-        features = response['image_features'][0]
-
-        return normalize(features.reshape(1, -1), copy=False, return_norm=False)[0].tolist()
-
     def as_json(self):
         spec = {
             'name': self.spec.name,
@@ -45,11 +35,6 @@ class Model(object):
     def _decode_spec(self, encoded_spec):
         if isinstance(encoded_spec, dict):
             return encoded_spec
-        if encoded_spec.startswith('https://') or encoded_spec.startswith('gs://') or encoded_spec.startswith('/'):
-            with tempfile.NamedTemporaryFile() as temp_file:
-                stored.sync(encoded_spec, temp_file.name)
-                with open(temp_file.name, 'r') as file:
-                    return json.loads(file.read())
         try:
             return json.loads(base64.b64decode(encoded_spec).decode())
         except (TypeError, ValueError, base64.binascii.Error):
