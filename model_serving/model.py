@@ -1,11 +1,9 @@
 import json
 import base64
 import tempfile
-import stored
 
 from tensorflow_serving_client import TensorflowServingClient
 from keras_model_specs import ModelSpec
-from sklearn.preprocessing import normalize
 
 
 class Model(object):
@@ -22,13 +20,6 @@ class Model(object):
         image_data = self.spec.load_image(image_path)
         response = self.serving_client.make_prediction(image_data, 'image', timeout=self.serving_timeout)
         return response['class_probabilities'][0].tolist()
-
-    def extract_features(self, image_path):
-        image_data = self.spec.load_image(image_path)
-        response = self.serving_client.make_prediction(image_data, 'image', timeout=self.serving_timeout)
-        features = response['image_features'][0]
-
-        return normalize(features.reshape(1, -1), copy=False, return_norm=False)[0].tolist()
 
     def as_json(self):
         spec = {
