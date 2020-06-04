@@ -1,2 +1,2 @@
-web: python -m model_serving.app
+web: python3 -m model_serving.app
 serving: tensorflow_model_server --port=9000 --model_name=model --model_base_path=/model

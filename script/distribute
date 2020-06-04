@@ -1,8 +1,13 @@
 #!/usr/bin/env bash
 set -e
 VERSION=$(grep "version=" setup.py | tr -d "version='" | tr -d ",'" | tr -d "[:space:]")
-source script/docker_build_and_push.sh
+docker_build_and_push() {
+    docker build -t $1 -f $2 $3 .
+    docker build -t ${1/:*/:latest} -f $2 $3 .
+    docker push $1
+    docker push ${1/:*/:latest}
+}
 set -x
 
-docker_build_and_push triage/model-serving:$VERSION docker/Dockerfile "--build-arg BASE_TAG=1.15.2"
-docker_build_and_push triage/model-serving-gpu:$VERSION docker/Dockerfile "--build-arg BASE_TAG=1.15.2-gpu"
+docker_build_and_push triage/model-serving:$VERSION docker/Dockerfile "--build-arg BASE_TAG=1.15.0"
+docker_build_and_push triage/model-serving-gpu:$VERSION docker/Dockerfile "--build-arg BASE_TAG=1.15.0-gpu"

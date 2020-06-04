@@ -33,11 +33,6 @@ def test_initialize_with_base64_dict_spec(mobilenet_json):
     assert model.as_json() == mobilenet_json
 
 
-def test_initialize_with_url_spec(mobilenet_json):
-    model = Model('https://storage.googleapis.com/model-serving-fixtures/model_spec.json')
-    assert model.as_json() == mobilenet_json
-
-
 def test_as_json(imagenet_mobilenet_v1_model, mobilenet_json):
     actual = imagenet_mobilenet_v1_model.as_json()
     assert actual == mobilenet_json

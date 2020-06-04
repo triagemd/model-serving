@@ -1,16 +1,16 @@
-sudo: required
-
 language: python
 
 python:
-  - 2.7
   - 3.6
 
 services:
   - docker
 
 before_install:
-  - travis_wait script/up
+  - pip install --upgrade pip
+  - pip install --upgrade -r requirements.txt
+  - travis_wait docker-compose up -d
+  - while ! nc -z localhost 9000; do sleep 1; done # wait for serving to start
 
 script:
   - script/test
