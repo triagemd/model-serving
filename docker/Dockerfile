@@ -2,7 +2,7 @@ ARG BASE_TAG
 FROM tensorflow/serving:${BASE_TAG}
 
 RUN apt-get -y update && \
-    apt-get -y install python3 python3-pip ruby libarchive-tools && \
+    apt-get -y install python3 python3-pip ruby bsdtar && \
     apt-get clean && \
     gem install foreman
 
